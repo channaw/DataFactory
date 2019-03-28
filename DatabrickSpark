@@ -1,0 +1,17 @@
+%python
+
+storage_account_name = "gcctempstorage"
+storage_account_access_key = "2csc3kVu5y6m7ZcqNBIEYuIB49KyjneSLyDMRpBof3BwCK6OMAUWSC/TTv/hAZIMk0npkBujEiMONkqfnakOLA=="
+
+file_location = "wasbs://testdata@gcctempstorage.blob.core.windows.net/testdata/pedestrian-crashes-chapel-hill-region.json"
+file_type = "json"
+
+spark.conf.set(
+  "fs.azure.account.key."+storage_account_name+".blob.core.windows.net",
+  storage_account_access_key)
+
+
+df = spark.read.json("wasbs://testdata@gcctempstorage.blob.core.windows.net/pedestrian-crashes-chapel-hill-region.json")
+df.createOrReplaceTempView("TestCrashData")
+crashStats = spark.sql("SELECT crash_grp, count(crash_grp) FROM TestCrashData group by crash_grp")
+crashStats.show()
