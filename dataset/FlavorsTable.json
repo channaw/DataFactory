@@ -1,0 +1,39 @@
+{
+	"name": "FlavorsTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FDCDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "FlavorId",
+				"type": "Int32"
+			},
+			{
+				"name": "FlavorName",
+				"type": "String"
+			},
+			{
+				"name": "CreatedDate",
+				"type": "DateTime"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "DateTime"
+			},
+			{
+				"name": "Image",
+				"type": "String"
+			},
+			{
+				"name": "Thumbnail",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[Flavors]"
+		}
+	}
+}

@@ -1,5 +1,5 @@
 {
-	"name": "AzureBlob1",
+	"name": "FlavorsFile",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "FDCStorage",
@@ -13,6 +13,14 @@
 			},
 			{
 				"name": "FlavorName",
+				"type": "String"
+			},
+			{
+				"name": "Image",
+				"type": "String"
+			},
+			{
+				"name": "Thumbnail",
 				"type": "String"
 			}
 		],
