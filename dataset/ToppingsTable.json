@@ -1,0 +1,31 @@
+{
+	"name": "ToppingsTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FDCDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "ToppingId",
+				"type": "Int32"
+			},
+			{
+				"name": "ToppingName",
+				"type": "String"
+			},
+			{
+				"name": "Image",
+				"type": "String"
+			},
+			{
+				"name": "Thumbnail",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[Toppings]"
+		}
+	}
+}
