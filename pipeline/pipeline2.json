@@ -1,0 +1,50 @@
+{
+	"name": "pipeline2",
+	"properties": {
+		"activities": [
+			{
+				"name": "CopyToppingsTable",
+				"type": "Copy",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"source": {
+						"type": "BlobSource",
+						"recursive": true
+					},
+					"sink": {
+						"type": "SqlSink",
+						"writeBatchSize": 10000
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"columnMappings": {
+							"FlavorId": "ToppingId",
+							"FlavorName": "ToppingName",
+							"Image": "Image",
+							"Thumbnail": "Thumbnail"
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "FrostingFile",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ToppingsTable",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		]
+	}
+}
