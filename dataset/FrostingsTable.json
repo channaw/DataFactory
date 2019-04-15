@@ -1,0 +1,39 @@
+{
+	"name": "FrostingsTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FDCDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "FrostingId",
+				"type": "Int32"
+			},
+			{
+				"name": "FrostingName",
+				"type": "String"
+			},
+			{
+				"name": "CreatedDate",
+				"type": "DateTime"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "DateTime"
+			},
+			{
+				"name": "Image",
+				"type": "String"
+			},
+			{
+				"name": "Thumbnail",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[Frosting]"
+		}
+	}
+}
