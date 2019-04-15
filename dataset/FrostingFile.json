@@ -1,0 +1,41 @@
+{
+	"name": "FrostingFile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FDCStorage",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureBlob",
+		"structure": [
+			{
+				"name": "FlavorId",
+				"type": "String"
+			},
+			{
+				"name": "FlavorName",
+				"type": "String"
+			},
+			{
+				"name": "Image",
+				"type": "String"
+			},
+			{
+				"name": "Thumbnail",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"format": {
+				"type": "TextFormat",
+				"columnDelimiter": ",",
+				"rowDelimiter": "",
+				"nullValue": "\\N",
+				"treatEmptyAsNull": true,
+				"skipLineCount": 0,
+				"firstRowAsHeader": true
+			},
+			"fileName": "FrostingList.csv",
+			"folderPath": "fdcexcelfiles"
+		}
+	}
+}
