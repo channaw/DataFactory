@@ -16,14 +16,6 @@
 				"type": "String"
 			},
 			{
-				"name": "CreatedDate",
-				"type": "DateTime"
-			},
-			{
-				"name": "ModifiedDate",
-				"type": "DateTime"
-			},
-			{
 				"name": "Image",
 				"type": "String"
 			},
