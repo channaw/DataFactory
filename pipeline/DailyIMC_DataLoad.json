@@ -1,53 +1,38 @@
 {
-	"name": "pipeline1",
+	"name": "DailyIMC_DataLoad",
 	"properties": {
 		"activities": [
 			{
-				"name": "CopyFlavorData",
-				"type": "Copy",
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"typeProperties": {
-					"source": {
-						"type": "BlobSource",
-						"recursive": true
-					},
-					"sink": {
-						"type": "SqlSink",
-						"writeBatchSize": 10000
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"columnMappings": {
-							"FlavorId": "FlavorId",
-							"FlavorName": "FlavorName",
-							"Image": "Image",
-							"Thumbnail": "Thumbnail"
-						}
-					}
-				},
-				"inputs": [
+				"name": "Execute AccountCopy",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
-						"referenceName": "FlavorsFile",
-						"type": "DatasetReference"
+						"activity": "WF_DailyIMC_DataLoad",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
-				"outputs": [
-					{
-						"referenceName": "FlavorsTable",
-						"type": "DatasetReference"
-					}
-				]
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "AccountCopy",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			},
 			{
-				"name": "CopyFrostingData",
-				"type": "Copy",
+				"name": "WF_DailyIMC_DataLoad",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Load_Configuration_Variables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -55,42 +40,44 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "BlobSource",
-						"recursive": true
-					},
-					"sink": {
-						"type": "SqlSink",
-						"writeBatchSize": 10000
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"columnMappings": {
-							"FlavorId": "FrostingId",
-							"FlavorName": "FrostingName",
-							"Image": "Image",
-							"Thumbnail": "Thumbnail"
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "FrostingFile",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "FrostingsTable",
-						"type": "DatasetReference"
-					}
-				]
+					"method": "POST"
+				}
 			},
 			{
-				"name": "Copy1",
-				"type": "Copy",
+				"name": "Load_Configuration_Variables",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": []
+			},
+			{
+				"name": "Execute CustomerCopy",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute AccountCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Complete_WF_DailyIMC_DataLoad",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Execute CustomerCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -98,39 +85,9 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"typeProperties": {
-					"source": {
-						"type": "BlobSource",
-						"recursive": true
-					},
-					"sink": {
-						"type": "SqlSink",
-						"writeBatchSize": 10000
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"columnMappings": {
-							"FlavorId": "FrostingId",
-							"FlavorName": "FrostingName",
-							"Image": "Image",
-							"Thumbnail": "Thumbnail"
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "FrostingFile",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "FrostingsTable",
-						"type": "DatasetReference"
-					}
-				]
+				"userProperties": []
 			}
-		]
+		],
+		"annotations": []
 	}
 }

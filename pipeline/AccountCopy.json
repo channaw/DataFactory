@@ -1,10 +1,18 @@
 {
-	"name": "pipeline2",
+	"name": "AccountCopy",
 	"properties": {
 		"activities": [
 			{
-				"name": "CopyToppingsTable",
+				"name": "CopyAccount",
 				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "adf_CopyAccount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -12,6 +20,7 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": [],
 				"typeProperties": {
 					"source": {
 						"type": "BlobSource",
@@ -44,7 +53,63 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "adf_CopyAccount",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "http://foo.foo",
+					"method": "POST",
+					"body": {
+						"value": "{ BatchName : \"adf_CopyAccount\", StartDateTime : @utcnow(), ParentBatchID : pipeline().parameters.ParentBatchID, Status : 9}",
+						"type": "Expression"
+					},
+					"linkedServices": [],
+					"datasets": []
+				}
+			},
+			{
+				"name": "Complete_CopyAccount",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "CopyAccount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"body": "{ BatchName : \"adf_CopyAccount\", EndDateTime : @utcnow(), ParentBatchID : pipeline().parameters.ParentBatchID, Status : 1, BatchID : @activity('adf_CopyAccount').output}",
+					"linkedServices": [],
+					"datasets": []
+				}
 			}
-		]
+		],
+		"parameters": {
+			"ParentBatchID": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"annotations": []
 	}
 }
